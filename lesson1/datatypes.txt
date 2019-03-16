@@ -1,0 +1,94 @@
+Типы данных MySQL
+
+Числовые типы (Numeric Types)
+-----------------------------
+
+Integer Types (Exact Value) - INTEGER, INT, SMALLINT, TINYINT, MEDIUMINT, BIGINT
+INTEGER[(M)] [UNSIGNED] [ZEROFILL]
+INTEGER(4) ZEROFILL
+454554545
+0012
+INTEGER UNSIGNED
+
+INT = INTEGER
+
+SMALLINT[(M)] [UNSIGNED] [ZEROFILL]
+
+TINYINT[(M)] [UNSIGNED] [ZEROFILL]
+ 
+
+Fixed-Point Types (Exact Value) - DECIMAL, NUMERIC
+
+DECIMAL[(M[,D])] [UNSIGNED] [ZEROFILL]
+DECIMAL(6,2)  3445,34
+
+NUMERIC =  DECIMAL
+DEC = DECIMAL
+
+000123
+002345
+
+Floating-Point Types (Approximate Value) - FLOAT, DOUBLE
+345454565,34
+FLOAT[(M,D)] [UNSIGNED] [ZEROFILL]
+
+
+Bit-Value Type - BIT
+BIT = BOOL = TINYINT(1)
+0 - false
+1 - true
+
+
+Типы даты и времени (Date and Time Types)
+-----------------------------------------
+
+The DATE, DATETIME, and TIMESTAMP Types
+DATE 'YYYY-MM-DD'
+2019-03-15
+
+DATETIME 'YYYY-MM-DD HH:MM:SS'
+2019-03-15 10:44:12
+
+TIMESTAMP[(M)]
+2019-03-15 10:44:12
+
+
+The TIME Type
+'HH:MM:SS'
+
+The YEAR Type
+YEAR[(2|4)]
+YEAR(4) = 2019
+YEAR(2) = 19
+
+
+
+Строковые типы (String Types)
+-----------------------------
+
+The CHAR and VARCHAR Types
+CHAR(M) [BINARY]
+CHAR(4) 'erer' 'Hi  '
+
+VARCHAR(M) [BINARY]
+VARCHAR(10) 
+
+
+The BINARY and VARBINARY Types
+
+
+The BLOB and TEXT Types
+
+
+The ENUM Type
+(val1, val2, val3)
+
+The SET Type
+(val1, val2, val3)
+
+Тип JSON (The JSON Data Type)
+-----------------------------
+
+JSON
+'["asa", 2, "fgfg"]'
+'{"key1" : "value1"}'

@@ -1,0 +1,41 @@
+WAMP
+LAMP
+MAMP
+
+Open Server
+open-server.ru
+
+Xampp
+https://www.apachefriends.org/ru/index.html
+
+Denver
+http://www.denwer.ru
+
+WampServer
+www.wampserver.com/ru/
+
+USB Webserver
+www.usbwebserver.net
+
+Winginx
+winginx.ru
+
+Vertrigo
+vertrigo.sourceforge.net
+
+Z-WAMP
+zwamp.sourceforge.net
+
+UwAmp 
+www.uwamp.com/en
+
+Bitnami WAMP Stack
+bitnami.com/stack/wamp
+
+AMPPS
+www.ampps.com
+
+
+
+
+
