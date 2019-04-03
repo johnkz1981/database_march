@@ -7,7 +7,7 @@
 
 -- Настройка мастера:
 
-$ sudo vim /etc/mysql/my.cnf
+# sudo vim /etc/mysql/my.cnf
 
 [mysqld]
 server-id = 1
@@ -21,11 +21,11 @@ slow_query_log
 
 -- Перезапускаем сервер мастера
 
-$ sudo systemctl restart mysql
+# sudo systemctl restart mysql
 
 -- Создание пользователя, под которым будет выполняться репликация 
 
-mysql -u root -p
+# mysql -u root -p
 
 mysql> create user rpl_user@192.168.56.102 identified by 'password';
 
@@ -43,17 +43,17 @@ mysql> CREATE DATABASE papers;
 mysql> USE papers;
 mysql> FLUSH TABLES WITH READ LOCK;
 
-mysqldump -u root -p papers > papers.sql
+# mysqldump -u root -p papers > papers.sql
 
 mysql> UNLOCK TABLES;
 
 -- Копируем дамп на слейв:
 
-scp papers.sql victor@192.168.56.102:
+# scp papers.sql victor@192.168.56.102:
 
 -- Настройка слейва
 
-$ sudo vim /etc/mysql/my.cnf
+# sudo vim /etc/mysql/my.cnf
 
 log_bin = /var/log/mysql/mysql-bin.log
 server-id = 2
@@ -67,7 +67,7 @@ slow_query_log   = 1
 
 -- Перезапускаем слейв
 
-$ sudo systemctl restart mysql
+# sudo systemctl restart mysql
 
 -- Инициализируем процесс репликации:
 
@@ -86,7 +86,7 @@ Executed_Gtid_Set:
 
 -- На слейве выполняем:
 
-root@node-02:~# mysql -u root -p
+# mysql -u root -p
 
 -- Подставляем учётную запись пользователя и параметры лог файла (MASTER_LOG_FILE и MASTER_LOG_POS)
 
@@ -182,95 +182,95 @@ Slave_SQL_Running: Yes
 -- Настройка кластера
 
 -- Заходим в MySQL Shell
-sudo mysqlsh
+# sudo mysqlsh
 
 -- Создаём 3 сервера в песочнице
-dba.deploySandboxInstance(3310);
-dba.deploySandboxInstance(3320);
-dba.deploySandboxInstance(3330);
+mysqlsh> dba.deploySandboxInstance(3310);
+mysqlsh> dba.deploySandboxInstance(3320);
+mysqlsh> dba.deploySandboxInstance(3330);
 
 -- Присоединяемся к первому
-shell.connect(“root@localhost:3310”);
+mysqlsh> shell.connect(“root@localhost:3310”);
 -- Создаём кластер
 
-cluster = dba.createCluster(‘mycluster’);
+mysqlsh> cluster = dba.createCluster(‘mycluster’);
 
 -- добавляем остальные инстансы в кластер
-cluster.addInstance(“root@localhost:3320”);
-cluster.addInstance(“root@localhost:3330”);
+mysqlsh> cluster.addInstance(“root@localhost:3320”);
+mysqlsh> cluster.addInstance(“root@localhost:3330”);
 
 -- Смотрим статус кластера
-cluster.status();
+mysqlsh> cluster.status();
 
 -- На Линуксе можем посмотреть процессы (в терминале)
-ps -ef|grep mysqld
+# ps -ef|grep mysqld
 
 -- И посмотреть саму песочницу
-cd ~/mysql-sandboxes
+# cd ~/mysql-sandboxes
 
 -- Убедимся, что роутер пока не запущен
-ps -ef|grep router
+# ps -ef|grep router
 
 -- Созданим новый роутер
-mysqlrouter --bootstrap root@localhost:3310 --directory /tmp/myrouter
+# mysqlrouter --bootstrap root@localhost:3310 --directory /tmp/myrouter
 
 -- Запустим роутер
-cd /tmp/myrouter/
-./start.sh
+# cd /tmp/myrouter/
+# ./start.sh
 
 -- Проверим, что роутер запустился (должен быть процесс с именем выбранной директории)
-ps -ef|grep router
+# ps -ef|grep router
 
 -- Подключимся к роутеру 
-sudo mysqlsh –uri root@localhost:6446
+# sudo mysqlsh –uri root@localhost:6446
 
 -- Переходим в SQL режим
-\sql
+mysqlsh> \sql
 
 -- Проверяем, на что указывает роутер
-select @@port;
+mysqlsh> select @@port;
 
 -- переходим в JS режим
-\js
+mysqlsh> \js
 
 -- Присоединяемся к первому инстансу кластера
-shell.connect(“root@localhost:3310”);
+mysqlsh> shell.connect(“root@localhost:3310”);
 
 -- Проверяем статус кластера
-cluster=dba.getCluster();
-cluster.status();
+mysqlsh> cluster=dba.getCluster();
+mysqlsh> cluster.status();
 
 -- Проверяем работу кластера
 -- Создаём БД и таблицу на одном инстансе, и проверяем что они появляются на всех инстансах
-mysql -uroot -p -P3310 -h127.0.0.1
-mysql -uroot -p -P3320 -h127.0.0.1
-mysql -uroot -p -P3330 -h127.0.0.1
+# mysql -uroot -p -P3310 -h127.0.0.1
+# mysql -uroot -p -P3320 -h127.0.0.1
+# mysql -uroot -p -P3330 -h127.0.0.1
 
-show databases;
-create database test_01;
-use test_01;
-show tables;
+mysql> show databases;
+mysql> create database test_01;
+mysql> use test_01;
+mysql> show tables;
 
 
 -- Проверяем отказоустойчивость кластера
 -- Останавливаем один инстанс
-sudo mysqlsh
-shell.connect(“root@localhost:6446”);
-dba.killSandboxInstance(3310);
+# sudo mysqlsh
+mysqlsh> shell.connect(“root@localhost:6446”);
+mysqlsh> dba.killSandboxInstance(3310);
 
 -- Проверяем на что указывает роутер теперь
-\sql
-select @@port;
+mysqlsh> \sql
+mysqlsh> select @@port;
 
 -- Смотрим статус кластера
-\js
-cluster=dba.getCluster();
-cluster.status();
+mysqlsh> \js
+mysqlsh> cluster=dba.getCluster();
+mysqlsh> cluster.status();
 
 -- Запускаем остановленный инстанс опять
 -- и проверяем статус кластера
-dba.startSandboxInstance(3310);
-cluster.status();
+mysqlsh> dba.startSandboxInstance(3310);
+mysqlsh> cluster.status();
 
 
 
