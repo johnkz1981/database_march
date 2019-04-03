@@ -1,0 +1,82 @@
+-- Запуск демона (сервиса) mongod
+sudo service mongod start
+
+-- Запуск Mongo shell 
+mongo
+
+-- Создадим администратора
+db.createUser({user: "admin", pwd: "password", roles: ["readWrite", "dbAdmin"]})
+
+-- Создадим БД
+use project
+
+-- Просмотр существующих баз данных
+show dbs
+
+-- Создадим коллекцию пользователей
+db.createCollection('users')
+
+-- Создадим коллекцию отделов
+db.createCollection('departments')
+
+-- Добавим первого пользователя
+db.users.insert({name: "Tom", age: 28, languages: ["english", "spanish"]})
+
+-- Выборка всей коллекции
+db.users.find()
+
+-- Создадим несколько новых пользователей
+db.users.insert({name: "Gary", age: 23, languages: ["english"]})
+db.users.insert({name: "Bill", age: 24, languages: ["english", "spanish"]})
+db.users.insert({name: "Fil", age: 32, languages: ["english", "spanish", "german"]})
+db.users.insert({name: "Megan", age: 35, languages: ["english", "spanish"]})
+
+db.users.find()
+
+-- Добавим компанию
+db.users.insert({company: {name: "Microsoft", languages: ["english", "spanish"]}})
+
+-- Поиск по имени
+db.users.find({name: "Gary"})
+
+-- Поиск компании по имени
+db.users.find({"company.name": "Microsoft"})
+
+-- Поиск по условию
+-- $gt $lt
+db.users.find({age: {$gt: 30}})
+db.users.find({age: {$gt: 25, $lt: 30}})
+
+-- $ne
+db.users.find({name: {$ne: "Megan"}})
+
+-- $in
+db.users.find({age: {$in: [23, 24]}})
+db.users.find({languages: {$in: ["spanish", "german"]}})
+
+-- $all
+db.users.find({languages: {$all: ["spanish", "german"]}})
+db.users.find({languages: {$nin: ["spanish", "german"]}})
+
+-- $or
+db.users.find({$or: [{name: "Gary"}, {age: 32}]})
+
+-- $exists
+db.users.find({company: {$exists: true}})
+db.users.find({name: {$regex: "Bi"}})
+
+-- Внесение изменений
+db.users.save({name: "Toby", age: 36, languages: ["english"]})
+db.users.update({name: "Toby"}, {$set: {languages: ["english", "spanish"]}})
+db.users.update({name: "Toby"}, {$unset: {languages: ["english", "spanish"]}})
+
+-- Поиск по ID
+db.users.find({_id: ObjectId("5ca4f783ece3991a4c6e30dc")})
+
+-- Бэкап и восстановление
+mongodump
+mongorestore 
+
+
+
+
