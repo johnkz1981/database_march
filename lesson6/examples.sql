@@ -35,7 +35,7 @@ mysql> flush privileges;
 
 -- Проверим, что права действительно выданы:
 
-mysql> show grants for replica_user@192.168.56.102;
+mysql> show grants for rpl_user@192.168.56.102;
 
 -- Создать базу данных и дамп.
 
